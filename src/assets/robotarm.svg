@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="700" viewBox="0 0 1400 700">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgb(165,120,255)" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="rgb(165,120,255)" stop-opacity="0.40"/>
+    </linearGradient>
+    <radialGradient id="r" cx="30%" cy="30%" r="70%">
+      <stop offset="0" stop-color="white" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="white" stop-opacity="0.0"/>
+    </radialGradient>
+    <filter id="blur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1400" height="700" fill="rgba(10,12,16,0)"/>
+  <rect x="60" y="60" width="1280" height="580" rx="48" fill="url(#g)"/>
+  <path d="M120 520 C 320 340, 520 660, 720 480 S 1120 360, 1280 520" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="6"/>
+  <circle cx="340" cy="390" r="12" fill="rgba(255,255,255,.75)"/>
+  <circle cx="720" cy="480" r="10" fill="rgba(255,255,255,.65)"/>
+  <circle cx="1040" cy="430" r="11" fill="rgba(255,255,255,.70)"/>
+  <rect x="160" y="140" width="1080" height="140" rx="32" fill="rgba(0,0,0,.18)" filter="url(#blur)"/>
+  <text x="200" y="220" font-family="Rubik, Arial" font-size="58" font-weight="800" fill="rgba(255,255,255,.92)">Robotic Arm</text>
+  <text x="200" y="270" font-family="Rubik, Arial" font-size="28" font-weight="500" fill="rgba(255,255,255,.82)">Precision · safety · telemetry</text>
+  <rect x="160" y="320" width="520" height="260" rx="36" fill="rgba(255,255,255,.12)"/>
+  <rect x="720" y="320" width="520" height="260" rx="36" fill="rgba(255,255,255,.10)"/>
+  <text x="200" y="410" font-family="Rubik, Arial" font-size="22" fill="rgba(255,255,255,.85)">Replace this SVG with a real image</text>
+  <text x="200" y="445" font-family="Rubik, Arial" font-size="18" fill="rgba(255,255,255,.75)">Factory / Drone / Sky / Robotics</text>
+  <text x="760" y="410" font-family="Rubik, Arial" font-size="22" fill="rgba(255,255,255,.85)">Drop-in placeholder</text>
+  <text x="760" y="445" font-family="Rubik, Arial" font-size="18" fill="rgba(255,255,255,.75)">Use your own visuals later</text>
+  <rect x="1120" y="560" width="180" height="46" rx="22" fill="rgba(255,255,255,.18)"/>
+  <text x="1150" y="592" font-family="Rubik, Arial" font-size="18" font-weight="700" fill="rgba(255,255,255,.92)">RoboGov</text>
+  <rect width="1400" height="700" fill="url(#r)"/>
+</svg>

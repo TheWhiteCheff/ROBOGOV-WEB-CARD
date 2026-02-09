@@ -1,11 +1,11 @@
-# ROBOGOV — Business Card (React)
+# RoboGov BizCard Landing (React + Vite)
 
-זה דף One‑Page שנועד לעבוד כמו **כרטיס ביקור מרשים** — עם:
-- רקע 3D Parallax (4 שכבות עומק)
-- Light/Dark mode
-- אנימציות Hover / Bubble‑Pop / Scroll‑Reveal
-- טיימליין בכרטיסיות
-- Admin Drawer לעריכת תוכן (Local בלבד)
+A one-page "business card" landing that looks like a product:
+- RTL/LTR + HE/EN toggle
+- Light/Dark theme
+- 4-layer parallax with a subtle 3D feel
+- Glass cards with blur, better contrast, refined animations
+- Timeline as cards
 
 ## Run
 ```bash
@@ -13,12 +13,17 @@ npm install
 npm run dev
 ```
 
-## Edit content
-- `src/content/defaultContent.ts` — תוכן ברירת מחדל (placeholder)
-- דרך הממשק: כפתור ⚙ למעלה → עריכה ב‑JSON → Save
+## Build
+```bash
+npm run build
+npm run preview
+```
 
-> טיפ פרטיות: השאר תוכן כללי בדיפולט. שים פרטי רק לפני שיתוף.
-"# ROBOGOV-WEB-CARD" 
-"# ROBOGOV-WEB-CARD" 
-"# ROBOGOV-WEB-CARD" 
-"# ROBOGOV-WEB-CARD" 
+## Deploy (simple)
+- Vercel: import the repo, framework = Vite
+- Netlify: build command `npm run build`, publish dir `dist`
+- GitHub Pages: build and publish `dist`
+
+## Edit content
+Change: `src/content/content.ts`
+Replace placeholder phone/email before publishing.

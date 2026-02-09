@@ -1,87 +1,99 @@
-import React from 'react'
+import React, { useEffect, useRef } from "react";
+
+function clamp(n: number, a: number, b: number) {
+  return Math.max(a, Math.min(b, n));
+}
 
 /**
- * Parallax 3D — 4 שכבות עומק:
- * - רחוק: זז הכי לאט
- * - בינוני: זז בינוני
- * - קרוב: זז מהר
- * - "Front": אלמנטים "קרובים למסך" עם תחושת עומק גבוהה
- *
- * התנועה מושפעת גם מעכבר וגם מגלילה.
+ * 4-layer parallax with a subtle 3D feel.
+ * - Mouse: updates --mx/--my in [-1..1]
+ * - Scroll: updates --sy in [0..1]
+ * Respects prefers-reduced-motion.
  */
-export function Parallax3D() {
-  const wrapRef = React.useRef<HTMLDivElement | null>(null)
+export default function Parallax3D() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
 
-    let mx = 0, my = 0, sy = 0
-    let raf = 0
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    if (reduced) return;
 
-    const onMove = (e: MouseEvent) => {
-      const w = window.innerWidth || 1
-      const h = window.innerHeight || 1
-      mx = (e.clientX / w - 0.5) * 2
-      my = (e.clientY / h - 0.5) * 2
-      request()
-    }
+    let raf = 0;
+    let targetMX = 0,
+      targetMY = 0,
+      mx = 0,
+      my = 0,
+      sy = 0;
+
+    const onMouse = (e: MouseEvent) => {
+      const { innerWidth: w, innerHeight: h } = window;
+      targetMX = clamp((e.clientX / w) * 2 - 1, -1, 1);
+      targetMY = clamp((e.clientY / h) * 2 - 1, -1, 1);
+    };
 
     const onScroll = () => {
-      const max = Math.max(1, document.body.scrollHeight - window.innerHeight)
-      sy = (window.scrollY / max) * 2 - 1
-      request()
-    }
+      const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      sy = clamp(window.scrollY / max, 0, 1);
+    };
 
-    const request = () => {
-      if (raf) return
-      raf = window.requestAnimationFrame(() => {
-        raf = 0
-        el.style.setProperty('--mx', mx.toFixed(4))
-        el.style.setProperty('--my', my.toFixed(4))
-        el.style.setProperty('--sy', sy.toFixed(4))
-      })
-    }
+    const tick = () => {
+      // smooth
+      mx += (targetMX - mx) * 0.06;
+      my += (targetMY - my) * 0.06;
 
-    window.addEventListener('mousemove', onMove, { passive: true })
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    request()
+      root.style.setProperty("--mx", mx.toFixed(4));
+      root.style.setProperty("--my", my.toFixed(4));
+      root.style.setProperty("--sy", sy.toFixed(4));
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMouse, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    raf = requestAnimationFrame(tick);
 
     return () => {
-      window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('scroll', onScroll)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [])
+      window.removeEventListener("mousemove", onMouse);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
-    <div ref={wrapRef} className="parallax3d" aria-hidden="true">
-      <div className="layer layer-far">
-        <div className="cloud cloud-a" />
-        <div className="cloud cloud-b" />
-        <div className="haze" />
-      </div>
-
-      <div className="layer layer-mid">
+    <div ref={rootRef} className="parallax" aria-hidden="true">
+      <div className="parallax__layer layer--far">
+        <span className="shape glow" style={{ ["--dx" as any]: "12vw", ["--dy" as any]: "10vh", ["--z" as any]: "-240px", ["--s" as any]: 0.05 }} />
+        <span className="shape ring" style={{ ["--dx" as any]: "72vw", ["--dy" as any]: "18vh", ["--z" as any]: "-260px", ["--s" as any]: 0.06 }} />
+        <span className="shape dots" style={{ ["--dx" as any]: "55vw", ["--dy" as any]: "64vh", ["--z" as any]: "-220px", ["--s" as any]: 0.05 }} />
         <div className="grid" />
-        <div className="orbit orbit-a" />
-        <div className="orbit orbit-b" />
       </div>
 
-      <div className="layer layer-near">
-        <div className="circuit circuit-a" />
-        <div className="circuit circuit-b" />
-        <div className="dotfield" />
+      <div className="parallax__layer layer--mid">
+        <span className="shape cloud" style={{ ["--dx" as any]: "8vw", ["--dy" as any]: "58vh", ["--z" as any]: "-160px", ["--s" as any]: 0.12 }} />
+        <span className="shape cloud" style={{ ["--dx" as any]: "70vw", ["--dy" as any]: "46vh", ["--z" as any]: "-170px", ["--s" as any]: 0.11 }} />
+        <span className="shape shard" style={{ ["--dx" as any]: "32vw", ["--dy" as any]: "22vh", ["--z" as any]: "-140px", ["--s" as any]: 0.12 }} />
       </div>
 
-      <div className="layer layer-front">
-        <div className="shard shard-a" />
-        <div className="shard shard-b" />
-        <div className="shard shard-c" />
+      <div className="parallax__layer layer--near">
+        <span className="shape node" style={{ ["--dx" as any]: "20vw", ["--dy" as any]: "28vh", ["--z" as any]: "-80px", ["--s" as any]: 0.22 }} />
+        <span className="shape node" style={{ ["--dx" as any]: "78vw", ["--dy" as any]: "30vh", ["--z" as any]: "-70px", ["--s" as any]: 0.23 }} />
+        <span className="shape node" style={{ ["--dx" as any]: "60vw", ["--dy" as any]: "76vh", ["--z" as any]: "-70px", ["--s" as any]: 0.20 }} />
       </div>
 
-      <div className="vignette" />
+      <div className="parallax__layer layer--front">
+        <div className="cube" style={{ ["--dx" as any]: "84vw", ["--dy" as any]: "78vh", ["--z" as any]: "-10px", ["--s" as any]: 0.28 }}>
+          <div className="cube__face f1" />
+          <div className="cube__face f2" />
+          <div className="cube__face f3" />
+          <div className="cube__face f4" />
+          <div className="cube__face f5" />
+          <div className="cube__face f6" />
+        </div>
+        <div className="vignette" />
+      </div>
     </div>
-  )
+  );
 }

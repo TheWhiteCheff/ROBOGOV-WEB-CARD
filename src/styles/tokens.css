@@ -1,0 +1,55 @@
+/* Design tokens: Sky + Robotics.
+   Two accent colors, used with restraint.
+*/
+:root{
+  --accent1: 120 220 255; /* sky */
+  --accent2: 165 120 255; /* violet */
+  --ok: 110 255 190;
+
+  /* Dark theme (space) */
+  --bg0: 7 10 20;
+  --bg1: 10 16 32;
+  --text: 233 240 255;
+  --muted: 182 194 220;
+
+  --panel: 18 28 52;
+
+  /* Opacity controls per theme */
+  /* Dark cards should be LESS transparent than light to avoid chaos */
+  --panelA: .88;
+  --panelSoftA: .72;
+  --topbarA: .54;
+  --iconBtnA: .46;
+  --heroGlowA: .22;
+  --stroke: 255 255 255;
+
+  --shadow: 0 18px 50px rgba(0,0,0,.35);
+  --radius: 18px;
+
+  /* Parallax vars */
+  --mx: 0;
+  --my: 0;
+  --sy: 0;
+
+  --font: "Rubik", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+}
+
+/* Light theme */
+:root[data-theme="light"]{
+
+  --panelA: .92;
+  --panelSoftA: .82;
+  --topbarA: .72;
+  --iconBtnA: .42;
+  --heroGlowA: .18;
+  /* Light theme (airy sky) */
+  --bg0: 246 251 255;
+  --bg1: 232 244 255;
+  --text: 14 18 32;
+  --muted: 70 86 120;
+
+  --panel: 255 255 255;
+  --stroke: 15 22 40;
+
+  --shadow: 0 18px 50px rgba(15,22,40,.12);
+}

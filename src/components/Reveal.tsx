@@ -1,26 +1,46 @@
-import React from 'react'
-import { motion, useInView } from 'framer-motion'
+import React, { useEffect, useRef, useState } from "react";
 
-export function Reveal({
+export default function Reveal({
   children,
-  delay = 0,
-  y = 18
+  className = "",
+  delayMs = 0,
 }: {
-  children: React.ReactNode
-  delay?: number
-  y?: number
+  children: React.ReactNode;
+  className?: string;
+  delayMs?: number;
 }) {
-  const ref = React.useRef<HTMLDivElement | null>(null)
-  const inView = useInView(ref, { margin: '-12% 0px -10% 0px', once: true })
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    if (reduced) {
+      setVisible(true);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setVisible(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.14 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y, filter: 'blur(10px)' }}
-      animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-      transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1], delay }}
+      className={`reveal ${visible ? "isVisible" : ""} ${className}`}
+      style={{ ["--d" as any]: `${delayMs}ms` }}
     >
       {children}
-    </motion.div>
-  )
+    </div>
+  );
 }
