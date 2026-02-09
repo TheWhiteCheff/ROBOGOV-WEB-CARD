@@ -73,8 +73,8 @@ body::after{
     center, center, center;
   background-repeat: repeat, no-repeat, no-repeat, no-repeat;
   animation: starTwinkle 7s ease-in-out infinite;
-  mix-blend-mode: screen;
-  opacity: 1;
+  mix-blend-mode: normal;
+  opacity: .78;
 }
 
 :root[data-theme="light"] body::after{
@@ -91,7 +91,7 @@ body::after{
 a{ color: inherit; text-decoration:none; }
 button{ font-family: inherit; }
 
-.app{ min-height:100vh; position:relative; }
+.app{ min-height:100vh; position:relative; z-index:1; }
 
 .skipLink{
   position:absolute;
@@ -271,8 +271,16 @@ button{ font-family: inherit; }
   background: linear-gradient(90deg, rgba(var(--accent1), .98), rgba(255,255,255,.96), rgba(var(--accent2), .92));
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: rgba(var(--text), .96);
 }
+@supports (-webkit-background-clip: text) or (background-clip: text){
+  .hero__h{
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 :root[data-theme="light"] .hero__h{
   background: none;
   color: rgb(var(--text));
